@@ -1,0 +1,9 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Target framework and the shared test packages come from tests\Directory.Build.props. -->
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\qDesk.Domain\qDesk.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

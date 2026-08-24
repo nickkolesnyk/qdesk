@@ -1,0 +1,35 @@
+<Project>
+
+  <!--
+    MSBuild stops walking up the directory tree at the *first* Directory.Build.props it finds, so
+    the one at the repository root would be ignored for test projects unless it is imported here
+    explicitly.
+
+    The search has to start one directory *above* this file ("../"), otherwise GetPathOfFileAbove
+    finds this very file again and MSBuild reports MSB4011 for the circular import.
+  -->
+  <Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" />
+
+  <PropertyGroup>
+    <!-- Test projects target plain net10.0, not net10.0-windows: they must never need WPF.
+         A future qDesk.Desktop.Tests project (view models) will override this locally. -->
+    <TargetFramework>net10.0</TargetFramework>
+    <IsTestProject>true</IsTestProject>
+    <!-- Required by xUnit v3: each test project builds into an executable that hosts its own
+         test runner, rather than a library loaded by an external runner process. -->
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+
+  <ItemGroup Label="Shared test stack">
+    <!-- xUnit v3 is the actively developed line. Unlike v2, a v3 test project builds into a real
+         executable that hosts the test runner itself, so tests run in their own process and cannot
+         leak static state into each other. It is the only test package needed. -->
+    <PackageReference Include="xunit.v3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Every test file gets `using Xunit;` without writing it. -->
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+</Project>

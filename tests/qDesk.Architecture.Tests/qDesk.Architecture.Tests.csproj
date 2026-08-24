@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <!-- References all three non-WPF projects, because its job is to inspect their assemblies
+         and assert the dependency rules. It deliberately does not reference qDesk.Desktop:
+         doing so would force this project to net10.0-windows. -->
+    <ProjectReference Include="..\..\src\qDesk.Domain\qDesk.Domain.csproj" />
+    <ProjectReference Include="..\..\src\qDesk.Application\qDesk.Application.csproj" />
+    <ProjectReference Include="..\..\src\qDesk.Infrastructure\qDesk.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>

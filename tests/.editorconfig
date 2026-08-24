@@ -1,0 +1,15 @@
+# Merged on top of the repository-root .editorconfig. Deliberately no `root = true`, so everything
+# defined there still applies and only the rules below are relaxed.
+
+[*.cs]
+
+# Test names are sentences: Deposit_of_a_negative_amount_is_rejected. That reads far better in a
+# failure report than DepositOfANegativeAmountIsRejected. CA1707 and IDE1006 exist to keep *public
+# library APIs* conventional, which is not what a test method is.
+dotnet_diagnostic.CA1707.severity = none
+dotnet_diagnostic.IDE1006.severity = none
+
+# xUnit finds test classes, fixtures and theory data by reflection, so the compiler's view of what
+# is "unused" or "never instantiated" is not trustworthy here.
+dotnet_diagnostic.IDE0051.severity = none
+dotnet_diagnostic.CA1812.severity = none
