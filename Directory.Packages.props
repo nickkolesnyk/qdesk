@@ -1,0 +1,26 @@
+<Project>
+
+  <!--
+    Central Package Management.
+
+    With this enabled, .csproj files list *which* packages they use but never *which version*.
+    Every version lives here, once. That prevents the classic problem where two projects end up
+    on different versions of the same library and the resulting bug only appears at runtime.
+
+    Adding a package with "dotnet package add" writes the PackageReference to the target project
+    and the PackageVersion here, automatically.
+  -->
+
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+
+  <ItemGroup Label="Testing">
+    <!-- xunit.v3 is the whole test stack. It hosts Microsoft.Testing.Platform itself, so the
+         old VSTest companions (Microsoft.NET.Test.Sdk, xunit.runner.visualstudio) and the
+         VSTest-only coverage collector (coverlet.collector) are not used. Coverage will be added
+         via Microsoft.Testing.Extensions.CodeCoverage when there is something worth measuring. -->
+    <PackageVersion Include="xunit.v3" Version="4.0.0" />
+  </ItemGroup>
+
+</Project>

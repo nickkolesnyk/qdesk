@@ -1,0 +1,43 @@
+<Project>
+
+  <!--
+    MSBuild automatically imports this file into every project below this folder, before the
+    project file itself is evaluated. It is the project-wide default: anything set here does not
+    need to be repeated in the eight .csproj files, and a project can still override it locally.
+  -->
+
+  <PropertyGroup Label="Language">
+    <LangVersion>latest</LangVersion>
+    <!-- Nullable reference types: the compiler tracks which references may be null and warns
+         when one is dereferenced unchecked. Combined with TreatWarningsAsErrors below, this
+         turns most NullReferenceExceptions into build failures. -->
+    <Nullable>enable</Nullable>
+    <!-- Adds the common `using` directives (System, System.Linq, ...) to every file implicitly. -->
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Quality gates">
+    <!-- A warning nobody fixes is not a warning. Enabled on day one, while the fallout is small. -->
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <!-- Makes the code-style rules in .editorconfig run during `dotnet build`, not just in the
+         editor. Without this, CI cannot enforce them. -->
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AnalysisLevel>latest-recommended</AnalysisLevel>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Build">
+    <!-- Same inputs produce byte-identical outputs, which makes build problems reproducible. -->
+    <Deterministic>true</Deterministic>
+    <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
+    <AccelerateBuildsInVisualStudio>true</AccelerateBuildsInVisualStudio>
+    <!-- Nothing here ships as a NuGet package. -->
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Metadata">
+    <Product>qDesk</Product>
+    <Company>qDesk</Company>
+  </PropertyGroup>
+
+</Project>
