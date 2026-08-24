@@ -55,10 +55,24 @@ public class ProjectReferenceTests
         var document = XDocument.Load(projectFile);
 
         return document.Descendants("ProjectReference")
-            .Select(element => Path.GetFileNameWithoutExtension(element.Attribute("Include")!.Value))
+            .Select(element => ProjectNameFrom(element.Attribute("Include")!.Value))
             .Order(StringComparer.Ordinal)
             .ToArray();
     }
+
+    /// <summary>
+    /// Turns an MSBuild Include path such as <c>..\qDesk.Domain\qDesk.Domain.csproj</c> into
+    /// <c>qDesk.Domain</c>.
+    /// </summary>
+    /// <remarks>
+    /// MSBuild writes these paths with backslashes on every platform, but <see cref="Path"/> treats a
+    /// backslash as a separator only on Windows. Passing the raw value to
+    /// <see cref="Path.GetFileNameWithoutExtension(string)"/> therefore returns the project name on
+    /// Windows and the entire relative path on Linux. Normalising to forward slashes first is
+    /// unambiguous on both, because Windows accepts them as separators too.
+    /// </remarks>
+    private static string ProjectNameFrom(string includePath) =>
+        Path.GetFileNameWithoutExtension(includePath.Replace('\\', '/'));
 
     private static string TargetFrameworkOf(string projectFile) =>
         XDocument.Load(projectFile).Descendants("TargetFramework").Single().Value;
