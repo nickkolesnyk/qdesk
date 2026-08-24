@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <RootNamespace>qDesk.Infrastructure</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Infrastructure points *inwards*: it implements the ports that the Application layer
+         declares, so the dependency arrow runs from Infrastructure towards the core of the
+         solution rather than the other way around. -->
+    <ProjectReference Include="..\qDesk.Application\qDesk.Application.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- WinExe rather than Exe: no console window is allocated when the app starts. -->
+    <OutputType>WinExe</OutputType>
+    <!-- The only project in the solution tied to Windows, because WPF is a Windows technology. -->
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <RootNamespace>qDesk.Desktop</RootNamespace>
+    <!-- Brings in the WPF assemblies and the XAML build steps that turn .xaml into partial classes. -->
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\qDesk.Application\qDesk.Application.csproj" />
+    <!-- Referenced only so the composition root can register Infrastructure's implementations
+         in the DI container. No view model may use anything from it directly; the architecture
+         tests will enforce that once they exist. -->
+    <ProjectReference Include="..\qDesk.Infrastructure\qDesk.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>

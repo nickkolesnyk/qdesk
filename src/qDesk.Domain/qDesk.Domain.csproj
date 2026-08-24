@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- Plain net10.0, deliberately not net10.0-windows. The domain cannot reference WPF even
+         by accident, and it can be reused by a server process unchanged. -->
+    <TargetFramework>net10.0</TargetFramework>
+    <RootNamespace>qDesk.Domain</RootNamespace>
+  </PropertyGroup>
+
+  <!-- No ItemGroup: the domain has zero dependencies, and that is the point. -->
+
+</Project>

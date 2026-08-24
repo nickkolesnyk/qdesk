@@ -1,0 +1,12 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/qDesk.Application/qDesk.Application.csproj" />
+    <Project Path="src/qDesk.Desktop/qDesk.Desktop.csproj" />
+    <Project Path="src/qDesk.Domain/qDesk.Domain.csproj" />
+    <Project Path="src/qDesk.Infrastructure/qDesk.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/qDesk.Architecture.Tests/qDesk.Architecture.Tests.csproj" />
+    <Project Path="tests/qDesk.Domain.Tests/qDesk.Domain.Tests.csproj" />
+  </Folder>
+</Solution>
