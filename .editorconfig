@@ -6,11 +6,18 @@ root = true
 
 [*]
 charset = utf-8
-end_of_line = crlf
+# LF everywhere, matching "* text=auto eol=lf" in .gitattributes. These two files must agree: git
+# controls what lands in your working tree, this controls what the analyzers demand of it. When they
+# disagree, IDE0055 fails the build on one platform and passes on the other.
+end_of_line = lf
 indent_style = space
 indent_size = 4
 insert_final_newline = true
 trim_trailing_whitespace = true
+
+# The exceptions declared in .gitattributes, restated so the two files cannot drift apart.
+[*.{cmd,bat,sln}]
+end_of_line = crlf
 
 [*.{json,yml,yaml,xml,csproj,props,targets,slnx}]
 indent_size = 2

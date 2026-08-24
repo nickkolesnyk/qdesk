@@ -1,12 +1,19 @@
-# Store text files with LF in the repository, check them out with native endings.
-# Without this, Windows CRLF endings leak into commits and every file looks
-# modified when the repo is touched from a different OS or from CI.
-* text=auto
+# Store text files with LF in the repository AND check them out with LF on every platform,
+# including Windows.
+#
+# The "eol=lf" half matters more than it looks. With plain "text=auto", git converts to the
+# platform's native ending on checkout, so the same file is CRLF on a Windows machine and LF on a
+# Linux CI runner. Any tool that has an opinion about line endings then disagrees with itself
+# depending on where it runs. .editorconfig is exactly such a tool, and the resulting IDE0055
+# build failure appears only in CI, which is the worst place to debug it.
+#
+# One authority for line endings: this file. .editorconfig matches it rather than restating it.
+* text=auto eol=lf
 
-# Files whose endings must survive regardless of platform.
-*.sh    text eol=lf
+# Batch files are the real exception: the Windows command interpreter can mis-handle LF.
 *.cmd   text eol=crlf
-*.ps1   text eol=crlf
+*.bat   text eol=crlf
+# Visual Studio rewrites .sln files with CRLF, so fighting it just creates noisy diffs.
 *.sln   text eol=crlf
 
 # Give git a language-aware diff for C#, so hunk headers show the enclosing member.
