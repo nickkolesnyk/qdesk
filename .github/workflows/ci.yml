@@ -1,0 +1,70 @@
+name: CI
+
+# When this runs. Pull requests are included so a branch is checked *before* it reaches main,
+# which is what makes branch protection useful later.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# If you push twice in quick succession, cancel the older run. Saves minutes and avoids the
+# confusion of two results arriving out of order for the same branch.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+# Least privilege: this workflow only ever reads the repository.
+permissions:
+  contents: read
+
+# Quieter logs: no SDK banner, no telemetry notice cluttering every step.
+env:
+  DOTNET_NOLOGO: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+
+jobs:
+  # Proves the claim that Domain, Application and Infrastructure are platform-agnostic. They target
+  # plain net10.0, so they must build and pass their tests on a machine with no Windows at all.
+  # If someone adds a Windows-only dependency to the core, this job is what notices.
+  core:
+    name: Core layers (Linux)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-dotnet@v6
+        with:
+          # Installs exactly the SDK pinned in global.json, so CI and your machine agree.
+          global-json-file: global.json
+
+      - name: Test the platform-agnostic layers
+        run: |
+          dotnet test --project tests/qDesk.Domain.Tests/qDesk.Domain.Tests.csproj
+          dotnet test --project tests/qDesk.Architecture.Tests/qDesk.Architecture.Tests.csproj
+
+  # The full solution, including the WPF project, which can only be built on Windows.
+  windows:
+    name: Full solution (Windows)
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-dotnet@v6
+        with:
+          global-json-file: global.json
+
+      - name: Restore
+        run: dotnet restore qDesk.slnx
+
+      - name: Build
+        # Warnings are errors via Directory.Build.props, so this step also enforces analyzers.
+        run: dotnet build qDesk.slnx --no-restore
+
+      - name: Verify formatting
+        # The counterpart to EnforceCodeStyleInBuild: this fails if any file deviates from
+        # .editorconfig, so style never becomes a review topic.
+        run: dotnet format --verify-no-changes qDesk.slnx
+
+      - name: Test
+        run: dotnet test --solution qDesk.slnx
