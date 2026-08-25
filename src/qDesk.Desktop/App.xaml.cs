@@ -78,15 +78,15 @@ public partial class App : System.Windows.Application
     {
         base.OnStartup(e);
 
+        // Resolved once, up front, and passed as a local. Arguments to a logging method are
+        // evaluated at the call site before the generated method checks whether the level is
+        // enabled, so a service lookup inline there is work done for a message that may be
+        // discarded. Analyzer CA1873 enforces this.
+        var logger = _host.Services.GetRequiredService<ILogger<App>>();
+
         try
         {
             await _host.StartAsync();
-
-            // Both arguments are resolved before the call rather than inline. Arguments to a logging
-            // method are evaluated at the call site, before the generated method checks whether the
-            // level is enabled, so a service lookup there is work done for a message that may be
-            // discarded. Analyzer CA1873 enforces this.
-            var logger = _host.Services.GetRequiredService<ILogger<App>>();
 
             AppLog.Started(logger, _environmentName);
 
@@ -94,6 +94,8 @@ public partial class App : System.Windows.Application
         }
         catch (Exception exception)
         {
+            AppLog.StartupFailed(logger, exception);
+
             MessageBox.Show(
                 $"qDesk failed to start.\n\n{exception}",
                 "qDesk",
