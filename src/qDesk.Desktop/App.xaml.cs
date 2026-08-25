@@ -29,6 +29,7 @@ namespace qDesk.Desktop;
 public partial class App : System.Windows.Application
 {
     private readonly IHost _host;
+    private readonly string _environmentName;
 
     public App()
     {
@@ -42,6 +43,8 @@ public partial class App : System.Windows.Application
         };
 
         HostApplicationBuilder builder = Host.CreateApplicationBuilder(settings);
+
+        _environmentName = builder.Environment.EnvironmentName;
 
         // Local overrides, git-ignored, layered last so they win. This is where a developer's own
         // database credentials will go, which is why the file must never be committed.
@@ -79,9 +82,13 @@ public partial class App : System.Windows.Application
         {
             await _host.StartAsync();
 
-            AppLog.Started(
-                _host.Services.GetRequiredService<ILogger<App>>(),
-                _host.Services.GetRequiredService<IHostEnvironment>().EnvironmentName);
+            // Both arguments are resolved before the call rather than inline. Arguments to a logging
+            // method are evaluated at the call site, before the generated method checks whether the
+            // level is enabled, so a service lookup there is work done for a message that may be
+            // discarded. Analyzer CA1873 enforces this.
+            var logger = _host.Services.GetRequiredService<ILogger<App>>();
+
+            AppLog.Started(logger, _environmentName);
 
             _host.Services.GetRequiredService<MainWindow>().Show();
         }
