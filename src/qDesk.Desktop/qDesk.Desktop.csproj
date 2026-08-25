@@ -18,4 +18,19 @@
     <ProjectReference Include="..\qDesk.Infrastructure\qDesk.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <!-- The generic host: DI container, layered configuration, logging and application lifetime in
+         one package, rather than four hand-wired mechanisms. -->
+    <PackageReference Include="Microsoft.Extensions.Hosting" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Configuration is read from next to the executable at runtime, so it has to be copied there.
+         PreserveNewest rather than Always keeps incremental builds incremental.
+         appsettings.Local.json is git-ignored and optional; the Update is a no-op until it exists. -->
+    <None Update="appsettings.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Update="appsettings.Development.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Update="appsettings.Local.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
 </Project>

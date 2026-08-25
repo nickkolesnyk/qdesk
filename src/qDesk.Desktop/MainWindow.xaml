@@ -5,8 +5,22 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:qDesk.Desktop"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-
+        d:DataContext="{d:DesignInstance Type=local:MainViewModel}"
+        Title="{Binding ApplicationTitle}"
+        Height="450" Width="800"
+        Background="#FF101418">
+    <Grid Margin="40">
+        <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center">
+            <TextBlock Text="{Binding ApplicationTitle}"
+                       Foreground="#FFF5F7FA"
+                       FontSize="30"
+                       FontWeight="SemiBold" />
+            <TextBlock Margin="0,10,0,0"
+                       Foreground="#FF8B97A6"
+                       FontSize="14">
+                <Run Text="Environment:" />
+                <Run Text="{Binding EnvironmentName}" FontWeight="SemiBold" />
+            </TextBlock>
+        </StackPanel>
     </Grid>
 </Window>
