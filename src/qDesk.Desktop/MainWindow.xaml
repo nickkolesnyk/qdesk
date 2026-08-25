@@ -19,7 +19,9 @@
                        Foreground="#FF8B97A6"
                        FontSize="14">
                 <Run Text="Environment:" />
-                <Run Text="{Binding EnvironmentName}" FontWeight="SemiBold" />
+                <!-- Mode=OneWay is required, not stylistic: unlike TextBlock.Text, Run.Text binds
+                     TwoWay by default, which throws against a get-only source property. -->
+                <Run Text="{Binding EnvironmentName, Mode=OneWay}" FontWeight="SemiBold" />
             </TextBlock>
         </StackPanel>
     </Grid>
